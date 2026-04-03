@@ -49,8 +49,11 @@ export const DebateView = ({ favorites, userId }: DebateViewProps) => {
 
       const history = messages.map(m => ({
         id: m.id,
+        chatId: 'debate',
+        userId: userId,
         role: m.role as 'user' | 'model',
         content: m.role === 'user' ? (m.content || '') : `[${personaA.name}]: ${m.contentA}\n[${personaB.name}]: ${m.contentB}`,
+        createdAt: new Date().toISOString(),
         timestamp: Date.now()
       }));
 

@@ -30,8 +30,12 @@ export interface Persona {
 
 export interface ChatMessage {
   id: string;
+  chatId: string;
+  userId: string;
   role: 'user' | 'model';
-  content: string;
+  content?: string;
+  responses?: { persona: Persona; content: string }[];
+  createdAt: any;
   timestamp: number;
 }
 
