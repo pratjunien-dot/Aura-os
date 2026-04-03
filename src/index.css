@@ -1,0 +1,392 @@
+@import "tailwindcss";
+
+@theme {
+  --color-theme-primary: var(--color-primary);
+  --color-theme-primary-dim: var(--color-primary-dim);
+  --color-theme-primary-glow: var(--color-primary-glow);
+  --color-theme-primary-light: var(--color-primary);
+  --color-theme-primary-dark: var(--bg-surface);
+  --color-theme-primary-darker: var(--bg-base);
+  --color-theme-accent: var(--color-accent);
+  --color-theme-accent-dim: var(--color-accent-dim);
+  --color-theme-bg: var(--bg-base);
+  --color-theme-bg-deep: var(--bg-deep);
+  --color-theme-surface: var(--bg-surface);
+  --color-theme-text: var(--color-text);
+  --color-theme-text-light: var(--color-text);
+  --color-theme-text-muted: var(--color-text-muted);
+  --color-theme-text-ghost: var(--color-text-ghost);
+}
+
+/* ═══════════════════════════════════════════════
+   AURA OS — Design Tokens v2.0
+   Liquid Glass System
+═══════════════════════════════════════════════ */
+
+:root {
+  /* ── Couche Fond ── */
+  --bg-deep:        #090914;
+  --bg-base:        #121222;
+  --bg-surface:     #1a1a33;
+
+  /* ── Couleur Primaire (par thème) ── */
+  --color-primary:       #00f5d4;    /* Cyber Teal (défaut) */
+  --color-primary-2:     #0066ff;    /* Cyber Blue */
+  --color-primary-dim:   #00f5d433;
+  --color-primary-glow:  #00f5d418;
+  --color-primary-rgb:   0, 245, 212;
+  --color-accent:        #7b2fff;
+  --color-accent-dim:    #7b2fff44;
+  
+  --gradient-primary: linear-gradient(135deg, var(--color-primary), var(--color-primary-2));
+  --gradient-surface: linear-gradient(180deg, var(--bg-surface), var(--bg-base));
+  --gradient-glow: radial-gradient(circle at center, var(--color-primary-dim), transparent);
+
+  /* ── Typographie ── */
+  --color-text:          rgba(240, 244, 255, 0.95);
+  --color-text-muted:    rgba(180, 190, 220, 0.60);
+  --color-text-ghost:    rgba(140, 155, 195, 0.35);
+
+  /* ── Glass Surfaces ── */
+  --glass-bg-l1:    rgba(var(--color-primary-rgb), 0.05);   /* Base cards */
+  --glass-bg-l2:    rgba(var(--color-primary-rgb), 0.08);   /* Panels flottants */
+  --glass-bg-l3:    rgba(var(--color-primary-rgb), 0.12);   /* Modals / Drawers */
+  --glass-bg-l4:    rgba(var(--color-primary-rgb), 0.18);   /* Focus / actif */
+
+  --glass-blur-l1:  blur(8px);
+  --glass-blur-l2:  blur(16px);
+  --glass-blur-l3:  blur(24px);
+  --glass-blur-l4:  blur(32px) saturate(1.4);
+
+  --glass-border:        rgba(var(--color-primary-rgb), 0.15);
+  --glass-border-active: rgba(var(--color-primary-rgb), 0.30);
+  --glass-border-glow:   rgba(var(--color-primary-rgb), 0.45);
+
+  /* ── Ombres ── */
+  --shadow-glass:   0 8px 32px rgba(0, 0, 0, 0.45),
+                    0 2px 8px  rgba(0, 0, 0, 0.30),
+                    inset 0 1px 0 rgba(255,255,255,0.08);
+  --shadow-float:   0 24px 64px rgba(0, 0, 0, 0.60),
+                    0 4px 16px  rgba(0, 0, 0, 0.40);
+  --shadow-glow:    0 0 24px var(--color-primary-dim),
+                    0 0 48px var(--color-primary-glow);
+
+  /* ── Rayons ── */
+  --radius-sm:   10px;
+  --radius-md:   18px;
+  --radius-lg:   26px;
+  --radius-xl:   36px;
+  --radius-pill: 999px;
+
+  /* ── Timing ── */
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-liquid:  cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-snap:    cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --duration-fast:   150ms;
+  --duration-base:   280ms;
+  --duration-slow:   480ms;
+  --duration-float:  600ms;
+}
+
+@utility theme-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility theme-bg-gradient {
+  background: var(--gradient-surface);
+}
+
+/* ── Thème Matrix ── */
+[data-theme="matrix"] {
+  --color-primary:      #00ff88;
+  --color-primary-2:    #004422;
+  --color-primary-dim:  #00ff8833;
+  --color-primary-glow: #00ff8818;
+  --color-primary-rgb:  0, 255, 136;
+  --color-accent:       #00ccff;
+  --bg-deep:            #000d00;
+  --bg-base:            #001a00;
+}
+
+/* ── Thème Cyberpunk ── */
+[data-theme="cyberpunk"] {
+  --color-primary:      #ffe600;
+  --color-primary-2:    #ff2d78;
+  --color-primary-dim:  #ffe60033;
+  --color-primary-glow: #ffe60018;
+  --color-primary-rgb:  255, 230, 0;
+  --color-accent:       #ff2d78;
+  --bg-deep:            #0d0005;
+  --bg-base:            #1a000a;
+}
+
+/* ── Thème Neon ── */
+[data-theme="neon"] {
+  --color-primary:      #ff00ff;
+  --color-primary-2:    #00ffff;
+  --color-primary-dim:  #ff00ff33;
+  --color-primary-glow: #ff00ff18;
+  --color-primary-rgb:  255, 0, 255;
+  --color-accent:       #00ffff;
+  --bg-deep:            #0a001a;
+  --bg-base:            #140033;
+}
+
+/* ── Thème Monochrome ── */
+[data-theme="monochrome"] {
+  --color-primary:      #ffffff;
+  --color-primary-2:    #444444;
+  --color-primary-dim:  #ffffff33;
+  --color-primary-glow: #ffffff18;
+  --color-primary-rgb:  255, 255, 255;
+  --color-accent:       #888888;
+  --bg-deep:            #000000;
+  --bg-base:            #0a0a0a;
+}
+
+/* ── Thème Sunset ── */
+[data-theme="sunset"] {
+  --color-primary:      #ff5e00;
+  --color-primary-2:    #ff0055;
+  --color-primary-dim:  #ff5e0033;
+  --color-primary-glow: #ff5e0018;
+  --color-primary-rgb:  255, 94, 0;
+  --color-accent:       #ff0055;
+  --bg-deep:            #1a0500;
+  --bg-base:            #330a00;
+}
+
+/* ── Mode OLED (Surcharge globale) ── */
+[data-oled="true"] {
+  --bg-deep:            #000000 !important;
+  --bg-base:            #000000 !important;
+  --bg-surface:         #050505 !important;
+}
+
+/* ── Thème Clair ── */
+[data-theme="light"] {
+  --bg-deep:             #e8ecf4;
+  --bg-base:             #f0f4fb;
+  --bg-surface:          #f8faff;
+  --color-primary:       #0066ff;
+  --color-primary-2:     #00ccff;
+  --color-primary-dim:   #0066ff22;
+  --color-primary-glow:  #0066ff10;
+  --color-primary-rgb:   0, 102, 255;
+  --glass-bg-l1:         rgba(255, 255, 255, 0.50);
+  --glass-bg-l2:         rgba(255, 255, 255, 0.65);
+  --glass-bg-l3:         rgba(255, 255, 255, 0.80);
+  --glass-border:        rgba(0, 0, 0, 0.08);
+  --color-text:          rgba(10, 15, 40, 0.92);
+  --color-text-muted:    rgba(40, 55, 100, 0.60);
+}
+
+/* ── Classe Glass Utilitaire ── */
+.glass {
+  background:           var(--glass-bg, var(--glass-bg-l2));
+  backdrop-filter:      var(--glass-blur, var(--glass-blur-l2));
+  -webkit-backdrop-filter: var(--glass-blur, var(--glass-blur-l2));
+  border:               1px solid var(--glass-border);
+  border-radius:        var(--radius-lg);
+  box-shadow:           var(--shadow-glass);
+  transition:           background var(--duration-base) var(--ease-liquid),
+                        border-color var(--duration-base) var(--ease-liquid),
+                        box-shadow var(--duration-base) var(--ease-liquid);
+  will-change: transform;
+  isolation: isolate;
+  transform: translateZ(0);
+  position: relative;
+}
+
+.glass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(var(--color-primary-rgb), 0.05), transparent);
+  pointer-events: none;
+  z-index: -1;
+  border-radius: inherit;
+}
+
+.glass:hover {
+  background:           var(--glass-bg-l3);
+  border-color:         var(--glass-border-active);
+}
+
+.glass--elevated {
+  background:           var(--glass-bg-l3);
+  backdrop-filter:      var(--glass-blur-l3);
+  -webkit-backdrop-filter: var(--glass-blur-l3);
+  box-shadow:           var(--shadow-float);
+}
+
+.glass--active {
+  border-color:         var(--glass-border-glow);
+  box-shadow:           var(--shadow-glass), var(--shadow-glow);
+}
+
+/* ── Fond Ambiant Animé ── */
+.bg-ambient {
+  position: fixed; inset: 0; z-index: 0; overflow: hidden;
+  background: var(--bg-base);
+}
+
+.bg-ambient::before {
+  content: '';
+  position: absolute;
+  width: 1000px; height: 1000px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--color-primary-dim) 0%, transparent 70%);
+  top: -400px; left: -300px;
+  animation: ambientDrift 18s ease-in-out infinite alternate;
+}
+
+.bg-ambient::after {
+  content: '';
+  position: absolute;
+  width: 800px; height: 800px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--color-primary-glow) 0%, transparent 70%);
+  bottom: -300px; right: -200px;
+  animation: ambientDrift 24s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes ambientDrift {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(60px, 40px) scale(1.15); }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.8);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary-dim);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* Equalizer Animation */
+@keyframes eq {
+  0% { height: 2px; }
+  50% { height: 100%; }
+  100% { height: 2px; }
+}
+.eq-bar {
+  animation: eq 1s ease-in-out infinite;
+}
+
+/* ── Glitch Hover ── */
+.glitch-hover {
+  position: relative;
+  transition: color 0.2s;
+}
+
+.glitch-hover:hover {
+  color: #fff;
+  text-shadow: 
+    0.05em 0 0 var(--color-primary), 
+    -0.025em -0.05em 0 var(--color-accent),
+    0.025em 0.05em 0 #B47FFF;
+  animation: glitch 500ms infinite;
+}
+
+@keyframes glitch {
+  0% { text-shadow: 1px 0 0 var(--color-primary), -1px 0 0 var(--color-accent); }
+  25% { text-shadow: -1px 0 0 var(--color-primary), 1px 1px 0 #B47FFF; }
+  50% { text-shadow: 1px -1px 0 var(--color-accent), -1px 1px 0 var(--color-primary); }
+  100% { text-shadow: -1px 0 0 #B47FFF, 1px 0 0 var(--color-accent); }
+}
+
+/* ── Shimmer Reflet ── */
+.glass-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-shimmer::before {
+  content: '';
+  position: absolute;
+  top: -150%;
+  left: -150%;
+  width: 300%;
+  height: 300%;
+  background: linear-gradient(
+    45deg,
+    transparent 45%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 55%
+  );
+  transition: all 0.6s;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.glass-shimmer:hover::before {
+  top: -50%;
+  left: -50%;
+}
+
+/* ── Bordure Tournante ── */
+.glass-active-border {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-active-border::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    transparent,
+    var(--color-primary),
+    transparent 30%
+  );
+  animation: rotate 4s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.glass-active-border > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ── Ripple Effect ── */
+.ripple-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(var(--color-primary-rgb), 0.4);
+  transform: scale(0);
+  animation: ripple-animation 0.6s linear;
+  pointer-events: none;
+}
+
+@keyframes ripple-animation {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}

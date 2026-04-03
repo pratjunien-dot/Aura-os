@@ -1,0 +1,229 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user of the application.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "The user's unique ID."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The user's email address."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "The user's display name."
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "The user's profile photo URL."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the user was created."
+        }
+      },
+      "required": ["uid", "email", "createdAt"]
+    },
+    "Chat": {
+      "title": "Chat",
+      "description": "A chat session.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The ID of the user who owns this chat."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the chat."
+        },
+        "selectedPersona": {
+          "type": "object",
+          "description": "The persona selected by the user to continue the conversation."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the chat was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the chat was last updated."
+        }
+      },
+      "required": ["userId", "title", "createdAt", "updatedAt"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "A message in a chat.",
+      "type": "object",
+      "properties": {
+        "chatId": {
+          "type": "string",
+          "description": "The ID of the chat this message belongs to."
+        },
+        "userId": {
+          "type": "string",
+          "description": "The ID of the user who owns this message."
+        },
+        "role": {
+          "type": "string",
+          "enum": ["user", "model"],
+          "description": "The role of the message sender."
+        },
+        "content": {
+          "type": "string",
+          "description": "The content of the message (for user messages)."
+        },
+        "responses": {
+          "type": "array",
+          "description": "The responses from the 3 personas (for model messages).",
+          "items": {
+            "type": "object",
+            "properties": {
+              "persona": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "tone": { "type": "string" },
+                  "lexicon": { "type": "array", "items": { "type": "string" } },
+                  "abstraction": { "type": "string", "enum": ["low", "medium", "high"] },
+                  "bias": { "type": "string" },
+                  "signature": { "type": "string" }
+                }
+              },
+              "content": { "type": "string" }
+            }
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the message was created."
+        }
+      },
+      "required": ["chatId", "userId", "role", "createdAt"]
+    },
+    "FavoritePersona": {
+      "title": "FavoritePersona",
+      "description": "A persona saved as a favorite by a user.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "icon": { "type": "string" },
+        "attributes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["string", "array"]
+          }
+        },
+        "temporal": {
+          "type": "object",
+          "properties": {
+            "era": { "type": "string" },
+            "role": { "type": "string" },
+            "knowledgeCutoff": { "type": "string" },
+            "forbiddenConcepts": { "type": "array", "items": { "type": "string" } },
+            "idioms": { "type": "array", "items": { "type": "string" } },
+            "historicalBias": { "type": "string" }
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the persona was favorited."
+        }
+      },
+      "required": ["name", "attributes", "createdAt"]
+    },
+    "MemoryTopic": {
+      "title": "MemoryTopic",
+      "description": "A topic discussed with a persona.",
+      "type": "object",
+      "properties": {
+        "label": { "type": "string" },
+        "count": { "type": "number" },
+        "keyPoints": { "type": "array", "items": { "type": "string" } },
+        "lastDiscussed": { "type": "string", "format": "date-time" }
+      },
+      "required": ["label", "count", "keyPoints"]
+    },
+    "MemoryPreference": {
+      "title": "MemoryPreference",
+      "description": "A learned preference for a persona.",
+      "type": "object",
+      "properties": {
+        "type": { 
+          "type": "string",
+          "enum": ["response_length", "formality", "example_density"]
+        },
+        "value": { "type": ["string", "number"] },
+        "confidence": { "type": "number" }
+      },
+      "required": ["type", "value", "confidence"]
+    },
+    "MemorySessionSummary": {
+      "title": "MemorySessionSummary",
+      "description": "A summary of a past session with a persona.",
+      "type": "object",
+      "properties": {
+        "summary": { "type": "string" },
+        "quote": { "type": "string" },
+        "coherenceScore": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["summary", "quote", "coherenceScore", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/User"
+      },
+      "description": "Stores user profiles."
+    },
+    "/users/{userId}/favoritePersonas/{favoriteId}": {
+      "schema": {
+        "$ref": "#/entities/FavoritePersona"
+      },
+      "description": "Stores favorite personas for a user."
+    },
+    "/users/{userId}/favoritePersonas/{favoriteId}/memory_topics/{topicId}": {
+      "schema": {
+        "$ref": "#/entities/MemoryTopic"
+      },
+      "description": "Stores topics discussed with a favorite persona."
+    },
+    "/users/{userId}/favoritePersonas/{favoriteId}/memory_preferences/{preferenceId}": {
+      "schema": {
+        "$ref": "#/entities/MemoryPreference"
+      },
+      "description": "Stores learned preferences for a favorite persona."
+    },
+    "/users/{userId}/favoritePersonas/{favoriteId}/memory_sessions_summary/{summaryId}": {
+      "schema": {
+        "$ref": "#/entities/MemorySessionSummary"
+      },
+      "description": "Stores session summaries for a favorite persona."
+    },
+    "/chats/{chatId}": {
+      "schema": {
+        "$ref": "#/entities/Chat"
+      },
+      "description": "Stores chat sessions."
+    },
+    "/chats/{chatId}/messages/{messageId}": {
+      "schema": {
+        "$ref": "#/entities/Message"
+      },
+      "description": "Stores messages within a chat."
+    }
+  }
+}

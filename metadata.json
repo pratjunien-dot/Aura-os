@@ -1,0 +1,143 @@
+{
+  "name": "Remix: AURA OS v2.1",
+  "description": "AURA OS — Adaptive Universal Response Agent Operating System. Mobile-first AI persona management shell powered by Google Gemini. Core features: Omega Persona Engine (dynamic generation, swipe carousel, 3D flip cards), real-time AI chat with persistent memory bank, contextual Suggestion Tags Explorer (Actualité, Science, Philosophie, SVT), dark glassmorphism UI optimized for iPhone 15.",
+  "preview": {
+    "route": "/",
+    "viewport": {
+      "width": 390,
+      "height": 844,
+      "deviceScaleFactor": 3
+    }
+  },
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "architecture": {
+    "frontend": {
+      "framework": "Next.js 15.5 (App Router)",
+      "language": "TypeScript 5",
+      "styling": "Tailwind CSS v4 — dark glassmorphism, electric violet #7C3AED + cyan #06B6D4",
+      "fonts": "Space Mono (monospace) · DM Sans (sans-serif)",
+      "stateManagement": "Zustand — useChatStore (personas + pipeline stage)",
+      "animations": "Framer Motion — swipe carousel, 3D flip, micro-interactions",
+      "validation": "Zod"
+    },
+    "backend": {
+      "database": "Firebase Firestore",
+      "auth": "Firebase Auth — Google Provider",
+      "ai": "@google/genai — Gemini 3.1 Flash-Lite (Chat) · Gemini 3.1 Pro (Engine) · cascade fallback across model versions",
+      "performance": "Edge Runtime pour les API IA, Streaming activé"
+    }
+  },
+  "features": {
+    "omegaPersonaEngine": {
+      "description": "Dynamic persona generation via Gemini prompt compilation",
+      "ui": "Tinder-style swipe carousel + 3D flip card reveal",
+      "store": "useChatStore — selectedPersonaId synced with activeCarouselIndex"
+    },
+    "chatSystem": {
+      "description": "Conversational chain with mid-chat persona context injection",
+      "memory": "Hierarchical storage: topics · preferences · session summaries per persona"
+    },
+    "memoryPersistence": {
+      "description": "Système hybride",
+      "storage": "Hiérarchique (par persona) + Globale (préférences utilisateur universelles)"
+    },
+    "suggestionTagsExplorer": {
+      "categories": [
+        "Actualité",
+        "Science",
+        "Philosophie",
+        "SVT"
+      ],
+      "input": "Multi-select tag chips + free text input"
+    },
+    "uiUx": {
+      "design": "Dark glassmorphism — electric violet #7C3AED + cyan #06B6D4",
+      "feedback": "Haptic feedback sur swipes et interactions clés"
+    },
+    "pipelineKernel": {
+      "description": "Orchestration shell driven by Zustand PipelineStage — extendable to strict pipeline execution"
+    }
+  },
+  "arborescence": {
+    "src": {
+      "app": [
+        "layout.tsx",
+        "page.tsx",
+        "api/"
+      ],
+      "nexus": {
+        "components": [
+          "PersonaCarousel.tsx",
+          "PersonaFlipCard.tsx",
+          "QuickStartWidget.tsx",
+          "HapticFeedback.tsx"
+        ],
+        "hooks": [
+          "usePersonaEngine.ts",
+          "useChatStore.ts",
+          "useHaptics.ts"
+        ],
+        "store": [
+          "useChatStore.ts"
+        ],
+        "views": [
+          "ChatView.tsx",
+          "SettingsView.tsx",
+          "FavoritesDrawer.tsx"
+        ]
+      },
+      "services": [
+        "personaService.ts",
+        "memoryService.ts"
+      ],
+      "lib": [
+        "geminiClient.ts",
+        "memoryPruner.ts"
+      ],
+      "types": [
+        "persona.types.ts",
+        "pipeline.types.ts"
+      ],
+      "validators": [
+        "persona.validators.ts"
+      ]
+    },
+    "config": {
+      "firebase": [
+        "firebase-applet-config.json",
+        "firebase-blueprint.json"
+      ],
+      "app": [
+        "metadata.json"
+      ]
+    },
+    "docs": {
+      "architecture": [
+        "BLUEPRINT_A2.md",
+        "SADT.md"
+      ],
+      "traces": []
+    },
+    "firestore.rules": ""
+  },
+  "env": {
+    "NEXT_PUBLIC_APP_NAME": "AURA OS",
+    "NEXT_PUBLIC_APP_VERSION": "2.1.0",
+    "NEXT_PUBLIC_DEFAULT_LOCALE": "fr",
+    "NEXT_PUBLIC_GEMINI_CHAT_MODEL": "gemini-3.1-flash-lite",
+    "NEXT_PUBLIC_GEMINI_ENGINE_MODEL": "gemini-3.1-pro"
+  },
+  "tags": [
+    "ai",
+    "gemini",
+    "next.js",
+    "persona",
+    "chat",
+    "mobile-first",
+    "glassmorphism",
+    "zustand",
+    "haptics"
+  ]
+}
