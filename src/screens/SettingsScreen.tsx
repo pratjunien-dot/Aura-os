@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Glass } from "@/ui/Glass";
 import { Palette, Cpu, Shield, Zap, HardDrive, LogOut, Activity, Monitor, Fingerprint, Loader2, RotateCcw } from "lucide-react";
-import { DynamicIcon } from "./DynamicIcon";
+import { DynamicIcon } from "../components/shared/DynamicIcon";
 import { useUIStore } from "@/stores/uiStore";
 import { motion } from "framer-motion";
 import { auth } from "@/firebase";

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Glass } from '@/ui/Glass';
 import { Bot, Send, Loader2, User as UserIcon, HelpCircle } from 'lucide-react';
-import { DynamicIcon } from './DynamicIcon';
+import { DynamicIcon } from '../components/shared/DynamicIcon';
 import { AIService } from '@/services/ai/AIService';
 import type { Persona } from '@/types';
 import ReactMarkdown from 'react-markdown';

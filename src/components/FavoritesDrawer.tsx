@@ -2,7 +2,7 @@ import { Drawer } from '@/ui/Drawer';
 import { useUIStore } from '@/stores/uiStore';
 import { Glass } from '@/ui/Glass';
 import { Star, Trash2, Play, Bot } from 'lucide-react';
-import { DynamicIcon } from './DynamicIcon';
+import { DynamicIcon } from './shared/DynamicIcon';
 import { Persona } from '@/types';
 
 interface FavoritesDrawerProps {
