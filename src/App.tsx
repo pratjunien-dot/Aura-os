@@ -389,10 +389,10 @@ const FloatingDock = ({
             initial={{ y: 70, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 70, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="w-full"
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            className="w-auto max-w-max mx-auto"
           >
-            <Glass level="l4" className={`flex items-center justify-center px-4 py-3 space-x-12 rounded-none shadow-[0_-15px_40px_rgba(0,0,0,0.6)] border-t border-theme-primary/30 backdrop-blur-3xl transition-all duration-500 w-full ${dockPinned ? 'bg-theme-primary/15' : ''}`}>
+            <Glass level="l4" className={`flex items-center justify-center px-6 py-3 space-x-8 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-theme-primary/20 backdrop-blur-2xl transition-all duration-500 mb-6 ${dockPinned ? 'bg-theme-primary/10' : ''}`}>
               {[
                 { id: "dashboard", icon: Home, label: "Accueil" },
                 { id: "chat", icon: MessageSquare, label: "Chat" },
@@ -402,21 +402,21 @@ const FloatingDock = ({
                 <button
                   key={id}
                   onClick={() => setView(id)}
-                  className={`relative flex flex-col items-center justify-center gap-1.5 min-w-[72px] transition-all duration-300 group ${
+                  className={`relative flex flex-col items-center justify-center gap-1 transition-all duration-300 group ${
                     currentView === id 
                       ? "text-theme-primary" 
-                      : "text-theme-primary/30 hover:text-theme-primary/60"
+                      : "text-theme-primary/40 hover:text-theme-primary/80"
                   }`}
                   title={label}
                 >
-                  <Icon className={`w-5 h-5 transition-transform duration-300 ${currentView === id ? 'scale-110' : 'group-hover:scale-105'}`} />
-                  <span className="font-mono text-[8px] uppercase tracking-[0.2em] font-medium">{label}</span>
                   {currentView === id && (
                     <motion.div 
-                      layoutId="activeTab"
-                      className="absolute -bottom-3 w-10 h-[1.5px] bg-theme-primary shadow-[0_0_10px_rgba(var(--color-primary-rgb),0.8)]"
+                      layoutId="activeHalo"
+                      className="absolute inset-0 bg-theme-primary/20 blur-md rounded-full"
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     />
                   )}
+                  <Icon className={`w-5 h-5 relative z-10 transition-transform duration-300 ${currentView === id ? 'scale-110 animate-breathe' : 'group-hover:scale-125'}`} />
                 </button>
               ))}
             </Glass>
@@ -733,7 +733,7 @@ export default function App() {
 
   if (!authReady || !_hasHydrated) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center relative overflow-hidden">
+      <div className="min-h-screen bg-theme-bg-deep flex items-center justify-center relative overflow-hidden">
         {/* Dynamic Background Gradient (Water rhythm) */}
         <motion.div
           animate={{
@@ -820,4 +820,52 @@ export default function App() {
     );
   }
 
+  return (
+    <div className="min-h-screen bg-theme-bg-deep text-theme-primary font-sans overflow-hidden">
+      <div className="stardust-bg" />
+      <audio ref={audioRef} src={stations[radioStation].url} />
+      <Header
+        user={user}
+        onLogin={handleLogin}
+        onLogout={handleLogout}
+        radio={
+          <RadioPlayer
+            isPlaying={radioPlaying}
+            setIsPlaying={setRadioPlaying}
+            currentStation={radioStation}
+            setCurrentStation={setRadioStation}
+          />
+        }
+        isVisible={headerVisible}
+        setIsVisible={setHeaderVisible}
+      />
+      <ViewContainer
+        viewKey={currentView}
+        direction={swipeDirection}
+        headerVisible={headerVisible}
+        dockVisible={dockVisible}
+      >
+        {currentView === "dashboard" && <DashboardView />}
+        {currentView === "chat" && (
+          <ChatInterface
+            user={user}
+            selectedChatId={selectedChatId}
+            onChatLoaded={() => {}}
+            selectedFavoritePersona={selectedFavoritePersona}
+            onFavoritePersonaLoaded={() => {}}
+          />
+        )}
+        {currentView === "debate" && (
+          <DebateView favorites={favorites} userId={user?.uid || ""} />
+        )}
+        {currentView === "settings" && <SettingsView />}
+      </ViewContainer>
+      <FloatingDock
+        currentView={currentView}
+        setView={setCurrentView}
+        isVisible={dockVisible}
+        setIsVisible={setDockVisible}
+      />
+    </div>
+  );
 }

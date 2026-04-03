@@ -14,7 +14,7 @@ interface UIStore {
   glassIntensity: number;       // 1–5 (map vers blur px)
   glassOpacity: number;         // 0.03–0.25
   reduceMotion: boolean;
-  isOled: boolean;
+  mode: 'dark' | 'light' | 'oled';
   dockPinned: boolean;
   hasSeenDockTip: boolean;
   presets: Preset[];
@@ -25,7 +25,7 @@ interface UIStore {
   closeDrawer: (d: keyof DrawerState) => void;
   setTheme: (t: string) => void;
   setGlassIntensity: (n: number) => void;
-  setOled: (b: boolean) => void;
+  setMode: (m: 'dark' | 'light' | 'oled') => void;
   setDockPinned: (b: boolean) => void;
   setHasSeenDockTip: (b: boolean) => void;
   setPresets: (presets: Preset[]) => void;
@@ -43,7 +43,7 @@ export const useUIStore = create<UIStore>()(
       glassIntensity: 3,
       glassOpacity: 0.07,
       reduceMotion: false,
-      isOled: false,
+      mode: 'dark',
       dockPinned: false,
       hasSeenDockTip: false,
       presets: [],
@@ -60,9 +60,9 @@ export const useUIStore = create<UIStore>()(
         document.documentElement.style.setProperty('--glass-blur-l2', `blur(${blur}px)`);
         set({ glassIntensity: n });
       },
-      setOled: (isOled) => {
-        document.documentElement.setAttribute('data-oled', isOled.toString());
-        set({ isOled });
+      setMode: (mode) => {
+        document.documentElement.setAttribute('data-mode', mode);
+        set({ mode });
       },
       setDockPinned: (dockPinned) => set({ dockPinned }),
       setHasSeenDockTip: (hasSeenDockTip) => set({ hasSeenDockTip }),
@@ -74,9 +74,9 @@ export const useUIStore = create<UIStore>()(
       onRehydrateStorage: () => (state) => {
         if (state) {
           state.setHasHydrated(true);
-          // Appliquer le thème et OLED au chargement
+          // Appliquer le thème et mode au chargement
           document.documentElement.setAttribute('data-theme', state.theme);
-          document.documentElement.setAttribute('data-oled', state.isOled.toString());
+          document.documentElement.setAttribute('data-mode', state.mode || 'dark');
           const blur = [8, 12, 16, 24, 32][state.glassIntensity - 1];
           document.documentElement.style.setProperty('--glass-blur-l2', `blur(${blur}px)`);
         }

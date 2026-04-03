@@ -6,7 +6,11 @@ import { db } from '@/firebase';
 import { collection, doc, setDoc, addDoc, serverTimestamp, getDocs, query, where } from 'firebase/firestore';
 
 // We need a separate adapter instance for background tasks if we don't want to expose it in AIService
-const adapter = new GeminiAdapter(process.env.GEMINI_API_KEY || '');
+const apiKey = process.env.GEMINI_API_KEY;
+if (!apiKey) {
+  throw new Error("GEMINI_API_KEY is not defined in environment variables.");
+}
+const adapter = new GeminiAdapter(apiKey);
 
 const TOPIC_SCHEMA = {
   type: Type.OBJECT,

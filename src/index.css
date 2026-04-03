@@ -61,6 +61,7 @@
   --glass-border:        rgba(var(--color-primary-rgb), 0.15);
   --glass-border-active: rgba(var(--color-primary-rgb), 0.30);
   --glass-border-glow:   rgba(var(--color-primary-rgb), 0.45);
+  --glass-inner-border:  rgba(255, 255, 255, 0.05);
 
   /* ── Ombres ── */
   --shadow-glass:   0 8px 32px rgba(0, 0, 0, 0.45),
@@ -99,6 +100,44 @@
   background: var(--gradient-surface);
 }
 
+@keyframes breathe {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(0.98); }
+}
+
+@utility animate-breathe {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+/* ── Stardust Background ── */
+.stardust-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.3), rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.3), rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 50px 160px, rgba(255,255,255,0.2), rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 90px 40px, rgba(255,255,255,0.3), rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 130px 80px, rgba(255,255,255,0.2), rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.1), rgba(0,0,0,0));
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  animation: stardust 150s linear infinite;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+[data-theme="deep-space"] .stardust-bg {
+  opacity: 1;
+}
+
+@keyframes stardust {
+  0% { background-position: 0 0; }
+  100% { background-position: -200px 200px; }
+}
+
 /* ── Thème Matrix ── */
 [data-theme="matrix"] {
   --color-primary:      #00ff88;
@@ -107,8 +146,6 @@
   --color-primary-glow: #00ff8818;
   --color-primary-rgb:  0, 255, 136;
   --color-accent:       #00ccff;
-  --bg-deep:            #000d00;
-  --bg-base:            #001a00;
 }
 
 /* ── Thème Cyberpunk ── */
@@ -119,8 +156,6 @@
   --color-primary-glow: #ffe60018;
   --color-primary-rgb:  255, 230, 0;
   --color-accent:       #ff2d78;
-  --bg-deep:            #0d0005;
-  --bg-base:            #1a000a;
 }
 
 /* ── Thème Neon ── */
@@ -131,20 +166,16 @@
   --color-primary-glow: #ff00ff18;
   --color-primary-rgb:  255, 0, 255;
   --color-accent:       #00ffff;
-  --bg-deep:            #0a001a;
-  --bg-base:            #140033;
 }
 
-/* ── Thème Monochrome ── */
-[data-theme="monochrome"] {
-  --color-primary:      #ffffff;
-  --color-primary-2:    #444444;
-  --color-primary-dim:  #ffffff33;
-  --color-primary-glow: #ffffff18;
-  --color-primary-rgb:  255, 255, 255;
-  --color-accent:       #888888;
-  --bg-deep:            #000000;
-  --bg-base:            #0a0a0a;
+/* ── Thème Emerald ── */
+[data-theme="emerald"] {
+  --color-primary:      #10b981;
+  --color-primary-2:    #059669;
+  --color-primary-dim:  #10b98133;
+  --color-primary-glow: #10b98118;
+  --color-primary-rgb:  16, 185, 129;
+  --color-accent:       #34d399;
 }
 
 /* ── Thème Sunset ── */
@@ -155,33 +186,37 @@
   --color-primary-glow: #ff5e0018;
   --color-primary-rgb:  255, 94, 0;
   --color-accent:       #ff0055;
-  --bg-deep:            #1a0500;
-  --bg-base:            #330a00;
 }
 
-/* ── Mode OLED (Surcharge globale) ── */
-[data-oled="true"] {
-  --bg-deep:            #000000 !important;
-  --bg-base:            #000000 !important;
-  --bg-surface:         #050505 !important;
+/* ── Thème Deep Space ── */
+[data-theme="deep-space"] {
+  --color-primary:      #00e5ff;
+  --color-primary-2:    #1a237e;
+  --color-primary-dim:  #00e5ff33;
+  --color-primary-glow: #00e5ff18;
+  --color-primary-rgb:  0, 229, 255;
+  --color-accent:       #534bae;
 }
 
-/* ── Thème Clair ── */
-[data-theme="light"] {
-  --bg-deep:             #e8ecf4;
-  --bg-base:             #f0f4fb;
-  --bg-surface:          #f8faff;
-  --color-primary:       #0066ff;
-  --color-primary-2:     #00ccff;
-  --color-primary-dim:   #0066ff22;
-  --color-primary-glow:  #0066ff10;
-  --color-primary-rgb:   0, 102, 255;
-  --glass-bg-l1:         rgba(255, 255, 255, 0.50);
-  --glass-bg-l2:         rgba(255, 255, 255, 0.65);
-  --glass-bg-l3:         rgba(255, 255, 255, 0.80);
-  --glass-border:        rgba(0, 0, 0, 0.08);
-  --color-text:          rgba(10, 15, 40, 0.92);
-  --color-text-muted:    rgba(40, 55, 100, 0.60);
+/* ── Modes d'affichage ── */
+[data-mode="oled"] {
+  --bg-deep:            #000000;
+  --bg-base:            #000000;
+  --bg-surface:         #050505;
+}
+
+[data-mode="light"] {
+  --bg-deep:             #e2e8f0;
+  --bg-base:             #f1f5f9;
+  --bg-surface:          #ffffff;
+  --glass-bg-l1:         rgba(255, 255, 255, 0.7);
+  --glass-bg-l2:         rgba(255, 255, 255, 0.8);
+  --glass-bg-l3:         rgba(255, 255, 255, 0.9);
+  --glass-border:        rgba(0, 0, 0, 0.1);
+  --glass-inner-border:  rgba(0, 0, 0, 0.05);
+  --color-text:          #1e293b;
+  --color-text-muted:    #64748b;
+  --color-text-ghost:    #94a3b8;
 }
 
 /* ── Classe Glass Utilitaire ── */
@@ -191,7 +226,7 @@
   -webkit-backdrop-filter: var(--glass-blur, var(--glass-blur-l2));
   border:               1px solid var(--glass-border);
   border-radius:        var(--radius-lg);
-  box-shadow:           var(--shadow-glass);
+  box-shadow:           var(--shadow-glass), inset 0 0 0 1px var(--glass-inner-border);
   transition:           background var(--duration-base) var(--ease-liquid),
                         border-color var(--duration-base) var(--ease-liquid),
                         box-shadow var(--duration-base) var(--ease-liquid);
@@ -205,7 +240,8 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(var(--color-primary-rgb), 0.05), transparent);
+  background: radial-gradient(circle at top left, var(--glass-inner-border), transparent 70%),
+              linear-gradient(135deg, rgba(var(--color-primary-rgb), 0.05), transparent);
   pointer-events: none;
   z-index: -1;
   border-radius: inherit;

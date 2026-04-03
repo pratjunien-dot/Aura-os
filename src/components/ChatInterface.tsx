@@ -21,6 +21,8 @@ import { MemoryAnalyzer } from "@/services/memory/MemoryAnalyzer";
 import type { Persona, MemoryBank, ChatMessage as Message } from "@/types";
 import { DynamicIcon } from './DynamicIcon';
 import { Glass } from "../ui/Glass";
+import { useDecrypt } from "../hooks/useDecrypt";
+import { CopyButton } from "../ui/CopyButton";
 import {
   Send,
   Loader2,
@@ -58,50 +60,8 @@ interface ChatInterfaceProps {
   onFavoritePersonaLoaded?: () => void;
 }
 
-const useDecrypt = (text: string, speed = 40) => {
-  const [display, setDisplay] = useState("");
-  const chars = "!<>-_\\/[]{}—=+*^?#________";
-
-  useEffect(() => {
-    let i = 0;
-    const timer = setInterval(() => {
-      if (i < text.length) {
-        setDisplay(
-          (prev) =>
-            text.substring(0, i) +
-            chars[Math.floor(Math.random() * chars.length)],
-        );
-        i++;
-      } else {
-        setDisplay(text);
-        clearInterval(timer);
-      }
-    }, speed);
-    return () => clearInterval(timer);
-  }, [text, speed]);
-
-  return display;
-};
-
-const CopyButton = ({ text }: { text: string }) => {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  return (
-    <button
-      onClick={handleCopy}
-      className="text-theme-primary/50 hover:text-theme-primary-light transition-colors p-1"
-      title="Copier la réponse"
-    >
-      {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-    </button>
-  );
-};
+// useDecrypt removed
+// CopyButton removed
 
 const NeuralWaveform = ({ isActive }: { isActive: boolean }) => (
   <div className="flex items-end gap-1 h-4 px-2">

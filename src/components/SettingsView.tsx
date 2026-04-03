@@ -61,8 +61,8 @@ export const SettingsView = () => {
     setTheme,
     glassIntensity,
     setGlassIntensity,
-    isOled,
-    setOled,
+    mode,
+    setMode,
     presets,
     activePresetId,
     setActivePresetId,
@@ -141,15 +141,15 @@ export const SettingsView = () => {
                     <h3 className="font-mono text-sm uppercase tracking-widest text-theme-primary-light">Thèmes Visuels</h3>
                   </div>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-6 gap-4">
                     {[
                       { id: "cyber", color: "#00f5d4", color2: "#0066ff", label: "Cyber" },
                       { id: "matrix", color: "#00ff88", color2: "#004422", label: "Matrix" },
                       { id: "cyberpunk", color: "#ffe600", color2: "#ff2d78", label: "Cyberpunk" },
                       { id: "neon", color: "#ff00ff", color2: "#00ffff", label: "Neon" },
+                      { id: "emerald", color: "#10b981", color2: "#059669", label: "Emerald" },
                       { id: "sunset", color: "#ff5e00", color2: "#ff0055", label: "Sunset" },
-                      { id: "monochrome", color: "#ffffff", color2: "#444444", label: "Mono" },
-                      { id: "light", color: "#0066ff", color2: "#00ccff", label: "Clair" },
+                      { id: "deep-space", color: "#00e5ff", color2: "#1a237e", label: "Deep Space" },
                     ].map((t) => (
                       <button
                         key={t.id}
@@ -194,15 +194,20 @@ export const SettingsView = () => {
                   <div className="space-y-8">
                     <div className="flex items-center justify-between p-4 border border-theme-primary/20 rounded-xl bg-theme-bg/40">
                       <div className="flex flex-col">
-                        <span className="font-mono text-xs text-theme-primary uppercase">Mode OLED</span>
-                        <span className="font-mono text-[10px] text-theme-primary/40">Fond noir profond pour écrans OLED</span>
+                        <span className="font-mono text-xs text-theme-primary uppercase">Mode d'affichage</span>
+                        <span className="font-mono text-[10px] text-theme-primary/40">Clair, Sombre ou OLED</span>
                       </div>
-                      <button
-                        onClick={() => setOled(!isOled)}
-                        className={`w-10 h-5 rounded-full relative transition-colors ${isOled ? 'bg-theme-primary' : 'bg-theme-primary/20'}`}
-                      >
-                        <div className={`absolute top-1 w-3 h-3 rounded-full bg-theme-bg transition-transform ${isOled ? 'right-1' : 'left-1'}`} />
-                      </button>
+                      <div className="flex space-x-2">
+                        {['light', 'dark', 'oled'].map((m) => (
+                          <button
+                            key={m}
+                            onClick={() => setMode(m as any)}
+                            className={`px-3 py-1.5 rounded-lg font-mono text-[10px] uppercase transition-colors ${mode === m ? 'bg-theme-primary text-theme-bg font-bold' : 'bg-theme-primary/10 text-theme-primary hover:bg-theme-primary/20'}`}
+                          >
+                            {m === 'light' ? 'Clair' : m === 'dark' ? 'Sombre' : 'OLED'}
+                          </button>
+                        ))}
+                      </div>
                     </div>
 
                     <div className="space-y-4">

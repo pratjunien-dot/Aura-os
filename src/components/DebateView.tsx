@@ -57,6 +57,7 @@ export const DebateView = ({ favorites, userId }: DebateViewProps) => {
         timestamp: Date.now()
       }));
 
+      console.log('[DebateView] Starting debate with:', { personaA, personaB, userMessage });
       const [streamA, streamB] = AIService.streamDebate(
         userMessage,
         personaA,
@@ -65,16 +66,22 @@ export const DebateView = ({ favorites, userId }: DebateViewProps) => {
         history,
         userId
       );
+      console.log('[DebateView] Streams initialized');
 
       // Process streams concurrently
       const processStream = async (stream: AsyncGenerator<string>, personaKey: 'contentA' | 'contentB') => {
-        for await (const chunk of stream) {
-          setMessages(prev => prev.map(msg => {
-            if (msg.id === responseMsgId) {
-              return { ...msg, [personaKey]: (msg[personaKey] || '') + chunk };
-            }
-            return msg;
-          }));
+        try {
+          for await (const chunk of stream) {
+            console.log(`[DebateView] Received chunk for ${personaKey}:`, chunk);
+            setMessages(prev => prev.map(msg => {
+              if (msg.id === responseMsgId) {
+                return { ...msg, [personaKey]: (msg[personaKey] || '') + chunk };
+              }
+              return msg;
+            }));
+          }
+        } catch (err) {
+          console.error(`[DebateView] Stream error for ${personaKey}:`, err);
         }
       };
 
@@ -96,32 +103,40 @@ export const DebateView = ({ favorites, userId }: DebateViewProps) => {
     <div className="flex-1 flex flex-col h-full overflow-hidden">
       {/* Header / Persona Selection */}
       <div className="p-4 border-b border-theme-primary/20 flex gap-4">
-        <div className="flex-1">
-          <label className="block font-mono text-xs text-theme-primary mb-1">Persona A</label>
-          <select 
-            className="w-full bg-theme-bg border border-theme-primary/30 text-theme-primary p-2 font-mono text-sm"
-            onChange={(e) => setPersonaA(favoritePersonas.find(p => p.name === e.target.value) || null)}
-            value={personaA?.name || ''}
-          >
-            <option value="">Sélectionner un favori...</option>
-            {favoritePersonas.map(p => (
-              <option key={p.name} value={p.name}>{p.name}</option>
-            ))}
-          </select>
-        </div>
-        <div className="flex-1">
-          <label className="block font-mono text-xs text-theme-primary mb-1">Persona B</label>
-          <select 
-            className="w-full bg-theme-bg border border-theme-primary/30 text-theme-primary p-2 font-mono text-sm"
-            onChange={(e) => setPersonaB(favoritePersonas.find(p => p.name === e.target.value) || null)}
-            value={personaB?.name || ''}
-          >
-            <option value="">Sélectionner un favori...</option>
-            {favoritePersonas.map(p => (
-              <option key={p.name} value={p.name}>{p.name}</option>
-            ))}
-          </select>
-        </div>
+        {favoritePersonas.length < 2 ? (
+          <div className="w-full p-3 bg-red-500/10 border border-red-500/30 text-red-400 font-mono text-sm rounded-lg text-center">
+            Vous devez ajouter au moins 2 personas à vos favoris (depuis le Chat) pour utiliser le mode Débat.
+          </div>
+        ) : (
+          <>
+            <div className="flex-1">
+              <label className="block font-mono text-xs text-theme-primary mb-1">Persona A</label>
+              <select 
+                className="w-full bg-theme-bg border border-theme-primary/30 text-theme-primary p-2 font-mono text-sm"
+                onChange={(e) => setPersonaA(favoritePersonas.find(p => p.name === e.target.value) || null)}
+                value={personaA?.name || ''}
+              >
+                <option value="">Sélectionner un favori...</option>
+                {favoritePersonas.map(p => (
+                  <option key={p.name} value={p.name}>{p.name}</option>
+                ))}
+              </select>
+            </div>
+            <div className="flex-1">
+              <label className="block font-mono text-xs text-theme-primary mb-1">Persona B</label>
+              <select 
+                className="w-full bg-theme-bg border border-theme-primary/30 text-theme-primary p-2 font-mono text-sm"
+                onChange={(e) => setPersonaB(favoritePersonas.find(p => p.name === e.target.value) || null)}
+                value={personaB?.name || ''}
+              >
+                <option value="">Sélectionner un favori...</option>
+                {favoritePersonas.map(p => (
+                  <option key={p.name} value={p.name}>{p.name}</option>
+                ))}
+              </select>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Chat Area */}

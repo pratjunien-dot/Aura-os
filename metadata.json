@@ -9,9 +9,7 @@
       "deviceScaleFactor": 3
     }
   },
-  "requestFramePermissions": [
-    "microphone"
-  ],
+  "requestFramePermissions": [],
   "architecture": {
     "frontend": {
       "framework": "Next.js 15.5 (App Router)",
